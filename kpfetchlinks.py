@@ -62,7 +62,14 @@ def main():
     global links, scanned
     
     kpstd.norm('Get source from root target: ')
-    src = get_data(target_root); print("OK")
+    try:
+    	src = urllib2.urlopen(target_root).read()
+    except Exception as e:
+    	print("failed")
+    	kpstd.error('Can not get source from root target.\n')
+    	raise Exception(str(e))
+    else:
+    	print("OK")
     
     scanned.append(target_root)
     scanned.append("http://data.ceh.vn/CEHv9-TV/")
@@ -117,4 +124,6 @@ try:
 except KeyboardInterrupt:   
     print
     kpstd.error('User quit\n')
+except Exception:
+	kpstd.error('Exiting...\n')
 
