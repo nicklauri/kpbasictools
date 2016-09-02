@@ -100,9 +100,25 @@ def attack(host, port, data, ndata):
 		client.close()
 		packet.sent += 1
 	except Exception:
-		error.send += 1
-		
+		error.send += 1		
 #
+
+def bytesformat(num):
+	B  = [1, 'B']
+	KB = [1024* B[0], 'KB']
+	MB = [1024*KB[0], 'MB']
+	GB = [1024*MB[0], 'GB']
+	
+	if float(num)/GB[0] > 1:
+		return "%.2f GB" %(round(float(num)/GB[0], 2))
+	elif float(num)/MB[0] > 1:
+		return "%.2f MB" %(round(float(num)/MB[0], 2))
+	elif float(num)/KB[0] > 1:
+		return "%.2f KB" %(round(float(num)/KB[0], 2))
+	else:
+		return "%4d B" %(num)
+#
+
 def thread_manager(func, num, target_tuple_args, verbose=True):
 	"""
 	thread_manager(target, num, *arg, **kwarg)
@@ -113,21 +129,6 @@ def thread_manager(func, num, target_tuple_args, verbose=True):
 	- kwarg : (dict) args of function
 	"""
 	
-	def bytesformat(num):
-		B  = [1, 'B']
-		KB = [1024* B[0], 'KB']
-		MB = [1024*KB[0], 'MB']
-		GB = [1024*MB[0], 'GB']
-		
-		if float(num)/GB[0] > 1:
-			return "%.2f GB" %(round(float(num)/GB[0], 2))
-		elif float(num)/MB[0] > 1:
-			return "%.2f MB" %(round(float(num)/MB[0], 2))
-		elif float(num)/KB[0] > 1:
-			return "%.2f KB" %(round(float(num)/KB[0], 2))
-		else:
-			return "%4d B" %(num)
-	
 	try:
 		while True:
 			if len(threading.enumerate()) - 1 < num:
@@ -136,15 +137,13 @@ def thread_manager(func, num, target_tuple_args, verbose=True):
 						target_tuple_args[2], target_tuple_args[3]))
 					th.start()
 				except Exception as e:
-					#print ' '*80 + '\r'
 					kpstd.error("Can not start thread.\n")
 					print e
 					error.thread += 1
 		
 			if verbose:
-				#print ' '*80 + '\r'
 				kpstd.info("Thread active: %2d/%2d | sent: %d packets (%s) | error: %d:%d:%d:%d        \r" \
-					%(len(threading.enumerate()) -1, num, packet.sent, bytesformat(packet.datalen*packet.sent),\
+					%(len(threading.enumerate()) -1, num, packet.sent, bytesformat(packet.datalen*packet.ndata*packet.sent),\
 					 error.send, error.thread, error.socket, error.connect))
 
 			if not target.is_alive:
@@ -382,13 +381,19 @@ if __name__ == "__main__":
 	except KeyboardInterrupt:
 		print
 		kpstd.error("User quit.\n")
-		kpstd.info("Exiting.\n")
 	except Exception as e:
 		if type(e) == tuple or type(e) == list:
 			e = e[len(e) - 1]
 		kpstd.error("Error: %s\n" %str(e))
-		kpstd.info("Exiting.\n")
-	else:
-		kpstd.info("Exiting.\n")
 	
+	if packet.sent:
+		kpstd.info("Statictics:\n")
+		print("    - Packet sent   : %d" %packet.sent)
+		print("    - Total         : %s" %bytesformat(packet.sent*packet.datalen*packet.ndata))
+		print("    - Send errors   : %d" %error.send)
+		print("    - Thread errors : %d" %error.thread)
+		print("    - Socket errors : %d" %error.socket)
+		print("    - Connect errors: %d" %error.connect)
+	
+	kpstd.info("Exiting.\n")
 	
