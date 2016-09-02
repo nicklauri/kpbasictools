@@ -380,10 +380,13 @@ if __name__ == "__main__":
 	try:
 		main()
 	except KeyboardInterrupt:
+		print
 		kpstd.error("User quit.\n")
 		kpstd.info("Exiting.\n")
 	except Exception as e:
-		print("Error: " + str(e))
+		if type(e) == tuple or type(e) == list:
+			e = e[len(e) - 1]
+		kpstd.error("Error: %s\n" %str(e))
 		kpstd.info("Exiting.\n")
 	else:
 		kpstd.info("Exiting.\n")
