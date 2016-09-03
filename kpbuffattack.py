@@ -17,7 +17,7 @@ class prog:
 	hversion = 0x0100	# 1.00
 
 class target:
-	name 		  = None    # inital target name
+	name          = None    # inital target name
 	port          = 80		# inital target port
 	limit_down    = 100	    # number of errors connection to regard target is down
 	is_alive      = False	# target status
@@ -162,7 +162,7 @@ def thread_manager(func, num, target_tuple_args, verbose=True):
 		kpstd.info('Quit? (Y/n): ')
 		choice = raw_input()
 		if choice.lower() == 'n':
-			thread_manager(target, num, verbose, arg, kwarg)
+			thread_manager(func, num, target_tuple_args, verbose)
 		else:
 			kpstd.info('Waiting for all threads stop: ')
 			main_thread = threading.current_thread()
