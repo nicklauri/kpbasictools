@@ -32,7 +32,7 @@ def usage():
 #
 
 def is_subnm(string):
-	if len(string.split('.')) != 3:
+	if len(string.split('.')) != 4:
 		return False
 	
 	for i in string.split('.'):
@@ -40,8 +40,7 @@ def is_subnm(string):
 			return False
 		elif int(i) > 255 or int(i) < 0:
 			return False
-	else:
-		return True
+	return True
 #
 
 def is_int(string):
@@ -87,14 +86,14 @@ def main():
 		exit()
 	
 	# Filter subnetmask address and integer:
-	submn = []
+	subnm = []
 	integ = []
 	error = False
 	nerro = []
 	
 	for item in sys.argv[1:]:
-		if is_submn(item):
-			submn.append(item)
+		if is_subnm(item):
+			subnm.append(item)
 		elif is_int(item):
 			integ.append(int(item))
 		else:
@@ -104,10 +103,21 @@ def main():
 	# Report errors and exit:
 	if error:
 		for item in nerro:
-			kpstd.error("Unknow type of argument: %s" %item)
+			kpstd.error("Unknow type of argument: %s\n" %item)
 			exit()
 	
+	# Converting:
+	if integ:
+		kpstd.info("Integer convert:\n")
+		for i in integ:
+			print("    %3d: %-15s" %(i, int2sub(i)))
 	
+	if subnm:
+		kpstd.info("Subnetmask address convert:\n")
+		for i in subnm:
+			print("    %-15s: %3d" %(i, sub2int(i)))
+	
+	kpstd.info("Exiting.\n")
 	
 #
 
@@ -115,7 +125,7 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        kpstd.norm("\nUser quit.\n")
+        kpstd.norm("User quit.\n")
     except Exception as e:
-        kpstd.error("\nError: " + str(e) + "\n")
+        kpstd.error("Error: " + str(e) + "\n")
 
