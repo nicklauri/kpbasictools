@@ -6,7 +6,6 @@
 #   Coyright (c) 2016 by Nick Lauri.
 #
 
-
 import os, sys
 import socket, threading
 from libs import kpstd
@@ -18,9 +17,9 @@ class prog:
 
 class target:
 	name          = None    # inital target name
-	port          = 80		# inital target port
-	limit_down    = 100	    # number of errors connection to regard target is down
-	is_alive      = False	# target status
+	port          = 80      # inital target port
+	limit_down    = 100     # number of errors connection to regard target is down
+	is_alive      = False   # target status
 	threads       = 5
 	verbose	      = True
 	
