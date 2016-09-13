@@ -65,7 +65,7 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("User quit.")
+        kptstd.error("User quit.\n")
     except Exception as e:
         print("Error: " + str(e))
 
