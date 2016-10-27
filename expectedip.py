@@ -18,7 +18,7 @@ class prog:
 def main():
     if len(sys.argv) != 3:
         kpstd.error("Just 3 parameter.\n")
-        kpstd.info(usage)
+        kpstd.info(prog.usage)
         exit()
     else:
         host = sys.argv[1]
