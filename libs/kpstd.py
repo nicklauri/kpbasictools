@@ -20,6 +20,11 @@ if os.name == 'posix':
 
     progname = os.path.split(sys.argv[0])[1]
 
+    def out(*msg):
+        for m in msg:
+            sys.stdout.write(m)
+            sys.stdout.flush()
+
     def kpout(msg, str_col):
         if not import_failed:
             sys.stdout.write(''.join([str_col, colorama.Style.RESET_ALL, msg]))

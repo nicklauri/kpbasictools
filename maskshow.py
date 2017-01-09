@@ -1,7 +1,8 @@
 #!/usr/bin/python 
 #
-#   File:	maskshow.py - change between subnet mask address and integer 
+#   File:	maskshow.py 
 #   Author: Nick Lauri
+#	Description: Change between subnet mask address and integer.
 #
 #   Coyright (c) 2016 by Nick Lauri.
 #

