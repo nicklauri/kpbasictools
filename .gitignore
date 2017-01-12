@@ -4,5 +4,6 @@ ceh_links.txt
 html-header
 google.py
 
+test_*
 *.pyc
 */*.pyc
