@@ -42,7 +42,7 @@ class Mail:
                 kpstd.info('stage 1: ')
                 data = client.recv(1000)
                 if '220' in data:
-                    kpstd.out("success \r")
+                    kpstd.out("success \n")
                 else:
                     kpstd.out("unknow status: '%s'\n" %data)
                 
@@ -50,7 +50,7 @@ class Mail:
                 client.send('HELO %s\r\n' %self.fakehost)
                 data = client.recv(1000)
                 if '250' in data:
-                    kpstd.out("success \r")
+                    kpstd.out("success \n")
                 else:
                     kpstd.out("unknow status: '%s'\n" %data)
 
@@ -58,7 +58,7 @@ class Mail:
                 client.send('MAIL FROM:<%s>\r\n' %self.mail_from)
                 data = client.recv(1000)
                 if '250' in data:
-                    kpstd.out("success \r")
+                    kpstd.out("success \n")
                 else:
                     kpstd.out("unknow status: '%s'\n" %data)
 
@@ -66,7 +66,7 @@ class Mail:
                 client.send('RCPT TO:<%s>\r\n' %self.rcpt_to)
                 data = client.recv(1000)
                 if '250' in data:
-                    kpstd.out("success \r")
+                    kpstd.out("success \n")
                 else:
                     kpstd.out("unknow status: '%s'\n" %data)
 
@@ -74,7 +74,7 @@ class Mail:
                 client.send('DATA\r\n')
                 data = client.recv(1000)
                 if '354' in data or 'data' in data:
-                    kpstd.out("success \r")
+                    kpstd.out("success \n")
                 else:
                     kpstd.out("unknow status: '%s'\n" %data)
 
@@ -116,7 +116,7 @@ class Mail:
 
 def usage():
     kpstd.info('python %s ' %sys.argv[0])
-    kpstd.info('<host> <from> <from_name> <to> <to_name> <subject> <content>\n')
+    kpstd.out ('<host> <from> <from_name> <to> <to_name> <subject> <content>\n')
 
 def banner():
     print("fakemail version 1.0 - Dev by Nick Lauri.")
