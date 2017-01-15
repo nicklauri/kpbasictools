@@ -115,11 +115,19 @@ class Mail:
         return lmx
 
 def usage():
-    kpstd.info('python %s ' %sys.argv[0])
-    kpstd.out ('<host> <from> <from_name> <to> <to_name> <subject> <content>\n')
+    kpstd.info('Usage:\n   python %s ' %sys.argv[0])
+    kpstd.out ('<host> <from> <from_name> <to> <to_name> <subject> <content>\n\n')
+    kpstd.info('Note:\n')
+    kpstd.out (' - host: domain. Ex: abc@yahoo.com => host: yahoo.com\n')
+    kpstd.out (' - from: your fake email.\n')
+    kpstd.out (' - from_name: your name.\n')
+    kpstd.out (' - to  : target\'s email.\n')
+    kpstd.out (' - to_name  : target\'s name.\n')
+    kpstd.out (' - subject  : subject @@\n')
+    kpstd.out (' - content  : email body.\n')
 
 def banner():
-    print("fakemail version 1.0 - Dev by Nick Lauri.")
+    print("KProject Mailer version 1.0 - written by Nick Lauri.")
 
 def main():
     a = sys.argv
