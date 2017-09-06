@@ -25,6 +25,7 @@ def main():
 	kpstd.info("Trying to read file '%s': " %arg)
 	try:
 		farg = open(arg)
+		fout = None
 	except IOError as e:
 		print("Failed")
 		kpstd.error("Can not open file '%s'\n" %arg)
